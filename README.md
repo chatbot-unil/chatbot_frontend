@@ -26,6 +26,10 @@ npm install --save-dev @types/react-router-dom
 npm install socket.io-client
 ```
 
+## Utilisation
+
+Le frontend est accessible en développement sur le port 3000. Pour accéder au frontend, il suffit de lancer un navigateur web et d'aller à l'adresse suivante : [http://localhost:3000](http://localhost:3000).
+
 Pour lancer le frontend, il suffit de lancer la commande suivante :
 
 ```bash
@@ -37,7 +41,3 @@ Pour build le frontend, il suffit de lancer la commande suivante :
 ```bash
 npm run build
 ```
-
-## Utilisation
-
-Le frontend est accessible en développement sur le port 3000. Pour accéder au frontend, il suffit de lancer un navigateur web et d'aller à l'adresse suivante : [http://localhost:3000](http://localhost:3000).
