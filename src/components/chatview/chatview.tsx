@@ -1,5 +1,3 @@
-// src/components/chatview/chatview.tsx
-
 import React, { useEffect, useState, useRef } from 'react';
 import io, { Socket } from 'socket.io-client';
 import './chatview.css';
@@ -10,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 
-const ChatView = () => {
+const ChatView: React.FC = () => {
   const [messages, setMessages] = useState<{ content: string; type: MessageType }[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [sessionId, setSessionId] = useState<string | null>(localStorage.getItem('sessionId'));
@@ -102,6 +100,7 @@ const ChatView = () => {
 
   return (
     <div className="chat-container">
+		<div className="chat-message-list">
       <ul className="messages-list">
         {messages.map((message, index) => (
           <Message
@@ -113,21 +112,22 @@ const ChatView = () => {
         ))}
       </ul>
 	  {!isLastMessageInView && (
-        <div className="scroll-button-container">
-          <IconButton onClick={scrollToLastMessage} className="scroll-button">
-		  	<ArrowDownwardIcon sx={{ color: 'white' }} />
-          </IconButton>
-        </div>
-      )}
+			<div className="scroll-button-container">
+			<IconButton onClick={scrollToLastMessage} className="scroll-button">
+				<ArrowDownwardIcon sx={{ color: 'white' }} />
+			</IconButton>
+			</div>
+		)}
+		</div>
       <form onSubmit={handleSendMessage} className="message-form">
-        <input
-          type="text"
+        <textarea
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
           className="message-input"
+		  rows={1}
         />
-		<IconButton
+        <IconButton
           type="submit"
           className="send-button"
           sx={{
@@ -135,11 +135,13 @@ const ChatView = () => {
             '&:hover': {
               backgroundColor: '#0056b3',
             },
-            color: 'white'
+            color: 'white',
+            width: '50px',
+            height: '50px',
           }}
         >
-		  <SendIcon style={{ color: 'white' }} />
-		</IconButton>
+          <SendIcon style={{ color: 'white' }} />
+        </IconButton>
       </form>
     </div>
   );

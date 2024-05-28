@@ -30,14 +30,19 @@
 	display: flex;
 	padding: 10px;
   }
-  
+
   .message-input {
 	flex: 1;
+	min-height: 25px;
+	max-height: 200px;
+	resize: vertical;
 	padding: 10px;
-	margin-right: 10px;
-	border-radius: 20px;
 	border: 1px solid #ccc;
+	border-radius: 20px;
+	margin-right: 10px;
+	overflow-y: auto;
   }
+  
   
   .send-button {
 	padding: 10px 20px;
@@ -52,19 +57,29 @@
 	background-color: #0056b3;
   }
 
+  .chat-message-list {
+	flex: 1;
+	position: relative;
+	margin-bottom: 0;
+  }
+  
+
   .scroll-button-container {
 	position: absolute;
-	top: 100%; 
 	left: 50%;
-	transform: translate(-50%, -120px);
+	bottom: 15px;
+	transform: translateX(-50%);
   }
 
   .scroll-button {
 	background-color: #007bff !important;
 	color: white;
+	border: none;
+	border-radius: 50%;
+	padding: 10px;
+	cursor: pointer;
   }
   
   .scroll-button:hover {
 	background-color: #0056b3 !important;
   }
-  
