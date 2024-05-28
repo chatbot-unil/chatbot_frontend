@@ -6,16 +6,9 @@ import './chatview.css';
 import Message, { MessageType } from '../message/message';
 import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SendIcon from '@mui/icons-material/Send';
 
-const backendHost = process.env.REACT_APP_BACKEND_HOST;
-const backendPort = process.env.REACT_APP_BACKEND_PORT;
-const SERVER_URL = `http://${backendHost}:${backendPort}`;
-
-console.log('Backend Host:', backendHost);
-console.log('Backend Port:', backendPort);
-console.log('Server URL:', SERVER_URL);
-
-console.log(SERVER_URL);
+const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 
 const ChatView = () => {
   const [messages, setMessages] = useState<{ content: string; type: MessageType }[]>([]);
@@ -134,7 +127,19 @@ const ChatView = () => {
           placeholder="Type a message..."
           className="message-input"
         />
-        <button type="submit" className="send-button">Send</button>
+		<IconButton
+          type="submit"
+          className="send-button"
+          sx={{
+            backgroundColor: '#007bff',
+            '&:hover': {
+              backgroundColor: '#0056b3',
+            },
+            color: 'white'
+          }}
+        >
+		  <SendIcon style={{ color: 'white' }} />
+		</IconButton>
       </form>
     </div>
   );
