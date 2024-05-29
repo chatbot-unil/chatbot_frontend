@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import io, { Socket } from 'socket.io-client';
 import './chatview.css';
 import Message, { MessageType } from '../message/message';
@@ -19,85 +19,95 @@ const ChatView: React.FC = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    socketRef.current = io(SERVER_URL);
+	const socket = io(SERVER_URL);
+    socketRef.current = socket;
 
-    socketRef.current.on('connect', () => {
-      console.log('Connected to server');
+    socket.on('connect', () => {
+      console.log('Connected to server with ID:', socket.id);
       if (sessionId) {
-        socketRef.current!.emit('restore_session', { session_id: sessionId });
+        socket!.emit('restore_session', { session_id: sessionId });
       } else {
-        socketRef.current!.emit('init');
+        socket!.emit('init');
       }
     });
 
-    socketRef.current.on('session_init', (data) => {
-      localStorage.setItem('sessionId', data.session_id);
-      setSessionId(data.session_id);
-      setMessages(messages => [...messages, { type: MessageType.Bot, content: data.initial_message }]);
-      console.log(`Session initialized with ID: ${data.session_id}`);
-    });
+    socket.on('session_init', (data) => {
+		localStorage.setItem('sessionId', data.session_id);
+		setSessionId(data.session_id);
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ type: MessageType.Bot, content: data.initial_message },
+		]);
+		console.log(`Session initialized with ID: ${data.session_id}`);
+	});
 
-    socketRef.current.on('session_restored', (data) => {
+    socket.on('session_restored', (data) => {
       localStorage.setItem('sessionId', data.session_id);
       setSessionId(data.session_id);
       setMessages(data.chat_history);
       console.log(`Session restored with ID: ${data.session_id}`);
     });
 
-    socketRef.current.on('response', (message) => {
-      setMessages(messages => [...messages, { type: MessageType.Bot, content: message }]);
-    });
+    socket.on('response', (message) => {
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ type: MessageType.Bot, content: message },
+		]);
+	});
 
-    socketRef.current.on('disconnect', () => {
+    socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
 
     return () => {
-      socketRef.current?.disconnect();
+      socket?.disconnect();
     };
   }, [sessionId]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim()) return;
-    if (sessionId) {
-      socketRef.current!.emit('query', { question: newMessage, session_id: sessionId });
-      setMessages(messages => [...messages, { type: MessageType.User, content: newMessage }]);
-      setNewMessage('');
-    } else {
-      console.error('Session ID is not set.');
-    }
-  };
+  const handleSendMessage = useCallback((e: React.FormEvent) => {
+	e.preventDefault();
+	if (!newMessage.trim()) return;
+	if (sessionId) {
+		socketRef.current?.emit('query', { question: newMessage, session_id: sessionId });
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ type: MessageType.User, content: newMessage },
+		]);
+		setNewMessage('');
+	} else {
+		console.error('Session ID is not set.');
+	}
+  }, [sessionId, newMessage]);
 
-  const scrollToLastMessage = () => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
+  const scrollToLastMessage = useCallback(() => {
+	if (lastMessageRef.current) {
+	  lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+	}
+  }, []);
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      setIsLastMessageInView(entry.isIntersecting);
-    });
+	scrollToLastMessage();
+  }, [messages, scrollToLastMessage]);
+  
+  useEffect(() => {
+	observerRef.current = new IntersectionObserver((entries) => {
+		const entry = entries[0];
+		setIsLastMessageInView(entry.isIntersecting);
+	});
 
-    if (lastMessageRef.current) {
-      observerRef.current.observe(lastMessageRef.current);
-    }
+	const currentLastMessageRef = lastMessageRef.current;
 
-    return () => {
-      if (observerRef.current && lastMessageRef.current) {
-        observerRef.current.unobserve(lastMessageRef.current);
-      }
-    };
-  }, [messages]);
+	if (currentLastMessageRef) {
+		observerRef.current.observe(currentLastMessageRef);
+	}
 
+	return () => {
+		if (observerRef.current && currentLastMessageRef) {
+			observerRef.current.unobserve(currentLastMessageRef);
+		}
+	};
+	}, [messages]);
+  
   return (
     <div className="chat-container">
 		<div className="chat-message-list">
