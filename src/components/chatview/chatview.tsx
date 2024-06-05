@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import io, { Socket } from 'socket.io-client';
 import './chatview.css';
-import Message, { MessageType } from '../message/message';
+import Message, { MessageType, MessageStatus, MessageProps } from '../message/message';
 import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SendIcon from '@mui/icons-material/Send';
@@ -9,10 +9,11 @@ import SendIcon from '@mui/icons-material/Send';
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 
 const ChatView: React.FC = () => {
-  const [messages, setMessages] = useState<{ content: string; type: MessageType }[]>([]);
+  const [messages, setMessages] = useState<MessageProps[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [sessionId, setSessionId] = useState<string | null>(localStorage.getItem('sessionId'));
   const [isLastMessageInView, setIsLastMessageInView] = useState(false);
+  const [isReciving, setIsReciving] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
   const lastMessageRef = useRef<HTMLLIElement | null>(null);
@@ -23,7 +24,7 @@ const ChatView: React.FC = () => {
     socketRef.current = socket;
 
     socket.on('connect', () => {
-      console.log('Connected to server with ID:', socket.id);
+      console.log(`Connecté au serveur avec l'ID: ${socket.id}`);
       if (sessionId) {
         socket!.emit('restore_session', { session_id: sessionId });
       } else {
@@ -38,25 +39,45 @@ const ChatView: React.FC = () => {
 			...prevMessages,
 			{ type: MessageType.Bot, content: data.initial_message },
 		]);
-		console.log(`Session initialized with ID: ${data.session_id}`);
+		console.log(`Session initialisée avec l'ID: ${data.session_id}`);
 	});
 
     socket.on('session_restored', (data) => {
       localStorage.setItem('sessionId', data.session_id);
       setSessionId(data.session_id);
       setMessages(data.chat_history);
-      console.log(`Session restored with ID: ${data.session_id}`);
+      console.log(`Session restorée avec l'ID: ${data.session_id}`);
     });
 
-    socket.on('response', (message) => {
+	socket.on('response_start', () => {
+		console.log('Début de la réponse');
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{ type: MessageType.Bot, content: message },
+			{ type: MessageType.Bot, content: '', status: MessageStatus.Ongoing },
 		]);
+		setIsReciving(true);
+	});
+
+	socket.on('response', (message) => {
+		setMessages((prevMessages) =>
+			prevMessages.map((msg) =>
+				msg.status === MessageStatus.Ongoing ? { ...msg, content: msg.content + message } : msg
+			)
+		);
+	});
+
+	socket.on('response_end', () => {
+		console.log('Fin de la réponse');
+		setMessages((prevMessages) =>
+			prevMessages.map((msg) =>
+				msg.status === MessageStatus.Ongoing ? { ...msg, status: MessageStatus.Finished } : msg
+			)
+		);
+		setIsReciving(false);
 	});
 
     socket.on('disconnect', () => {
-      console.log('Disconnected from server');
+      console.log('Déconnecté du serveur');
     });
 
     return () => {
@@ -81,7 +102,7 @@ const ChatView: React.FC = () => {
 
   const scrollToLastMessage = useCallback(() => {
 	if (lastMessageRef.current) {
-	  lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+	  lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
 	}
   }, []);
 
@@ -111,21 +132,21 @@ const ChatView: React.FC = () => {
   return (
     <div className="chat-container">
 		<div className="chat-message-list">
-      <ul className="messages-list">
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            type={message.type}
-            content={message.content}
-            ref={index === messages.length - 1 ? lastMessageRef : null}
-          />
-        ))}
-      </ul>
+		<ul className="messages-list">
+			{messages.map((message, index) => (
+			<Message
+				key={index}
+				type={message.type}
+				content={message.content}
+				ref={index === messages.length - 1 ? lastMessageRef : null}
+			/>
+			))}
+		</ul>
 	  {!isLastMessageInView && (
 			<div className="scroll-button-container">
-			<IconButton onClick={scrollToLastMessage} className="scroll-button">
-				<ArrowDownwardIcon sx={{ color: 'white' }} />
-			</IconButton>
+				<IconButton onClick={scrollToLastMessage} className="scroll-button">
+					<ArrowDownwardIcon sx={{ color: 'white' }} />
+				</IconButton>
 			</div>
 		)}
 		</div>
@@ -141,13 +162,14 @@ const ChatView: React.FC = () => {
           type="submit"
           className="send-button"
           sx={{
-            backgroundColor: '#007bff',
+            backgroundColor: isReciving ? '#cccccc' : '#007bff',
             '&:hover': {
-              backgroundColor: '#0056b3',
+              backgroundColor: isReciving ? '#cccccc' : '#0056b3',
             },
             color: 'white',
             width: '50px',
             height: '50px',
+			cursor: isReciving ? 'not-allowed' : 'pointer',
           }}
         >
           <SendIcon style={{ color: 'white' }} />

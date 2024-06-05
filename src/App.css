@@ -24,6 +24,10 @@
 	pointer-events: none;
   }
   
+  body {
+	overflow: hidden;
+  }
+
   /* This makes sure the chat view stretches properly */
   @media (prefers-reduced-motion: no-preference) {
 	.App-logo {

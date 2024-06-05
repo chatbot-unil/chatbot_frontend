@@ -2,9 +2,8 @@
 
 .chat-container {
 	width: 100%;
-	max-width: 600px;
-	margin: auto;
-	padding: 20px;
+	height: 100%;
+	margin: 0;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	background: #f9f9f9;
 	border-radius: 8px;
@@ -12,16 +11,24 @@
 	flex-direction: column;
 	position: relative;
   }
-  
-  .messages-list {
+
+  .chat-message-list {
+	flex: 1;
 	overflow-y: auto;
 	margin-bottom: 10px;
-	height: 400px;
+	flex-direction: column;
+  }
+  
+  
+  .messages-list {
+	flex: 1; /* Take up available space */
+	overflow-y: auto;
+	margin-bottom: 10px;
 	display: flex;
 	flex-direction: column;
 	padding: 0;
   }
-  
+
   .messages-list li {
 	list-style-type: none;
   }
@@ -51,6 +58,11 @@
 	border: none;
 	border-radius: 20px;
 	cursor: pointer;
+  }
+
+  .send-button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;  
   }
   
   .send-button:hover {
