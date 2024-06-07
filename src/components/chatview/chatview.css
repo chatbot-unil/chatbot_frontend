@@ -1,6 +1,4 @@
-/* src/components/chatview/chatview.css */
-
-.chat-container {
+  .chat-container {
 	width: 100%;
 	height: 100%;
 	margin: 0;
@@ -11,24 +9,23 @@
 	flex-direction: column;
 	position: relative;
   }
-
+  
   .chat-message-list {
 	flex: 1;
 	overflow-y: auto;
-	margin-bottom: 10px;
+	display: flex;
 	flex-direction: column;
   }
   
-  
   .messages-list {
-	flex: 1; /* Take up available space */
+	flex: 1;
 	overflow-y: auto;
 	margin-bottom: 10px;
 	display: flex;
 	flex-direction: column;
 	padding: 0;
   }
-
+  
   .messages-list li {
 	list-style-type: none;
   }
@@ -37,7 +34,7 @@
 	display: flex;
 	padding: 10px;
   }
-
+  
   .message-input {
 	flex: 1;
 	min-height: 25px;
@@ -50,39 +47,33 @@
 	overflow-y: auto;
   }
   
-  
   .send-button {
-	padding: 10px 20px;
+	width: 50px;
+	height: 50px;
 	background-color: #007bff;
 	color: white;
 	border: none;
-	border-radius: 20px;
+	border-radius: 50%;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
   }
-
+  
   .send-button:disabled {
 	background-color: #cccccc;
-	cursor: not-allowed;  
+	cursor: not-allowed;
   }
   
   .send-button:hover {
 	background-color: #0056b3;
   }
-
-  .chat-message-list {
-	flex: 1;
-	position: relative;
-	margin-bottom: 0;
+  
+  .scroll-button-container {
+	display: flex;
+	justify-content: center;
   }
   
-
-  .scroll-button-container {
-	position: absolute;
-	left: 50%;
-	bottom: 15px;
-	transform: translateX(-50%);
-  }
-
   .scroll-button {
 	background-color: #007bff !important;
 	color: white;
@@ -94,4 +85,45 @@
   
   .scroll-button:hover {
 	background-color: #0056b3 !important;
+  }
+  
+  @media screen and (max-width: 900px) {
+	.message {
+	  margin: 5px;
+	  padding: 0px 5px;
+	}
+	.message p {
+	  font-size: smaller;
+	}
+	.user-message {
+	  max-width: 80%;
+	}
+	.bot-message {
+	  width: 90%;
+	}
+  }
+  
+  @media screen and (max-width: 600px) {
+	.message-input {
+	  padding: 8px;
+	}
+	.send-button {
+	  width: 40px;
+	  height: 40px;
+	}
+	.scroll-button {
+	  width: 40px;
+	  height: 40px;
+	}
+  }
+  
+  @media screen and (max-width: 600px) {
+	.send-button {
+	  width: 40px;
+	  height: 40px;
+	}
+	.scroll-button {
+	  width: 40px;
+	  height: 40px;
+	}
   }
