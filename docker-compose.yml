@@ -9,8 +9,6 @@ services:
     depends_on:
       backend:
         condition: service_started
-    networks:
-      - net
 
   ngrok:
     image: ngrok/ngrok:latest
@@ -25,15 +23,7 @@ services:
       - "--all"
       - "--config"
       - "/etc/ngrok.yml"
-    environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTH_TOKEN}
     volumes:
       - ./ngrok.yml:/etc/ngrok.yml
     ports:
       - 4040:4040
-    networks:
-      - net
-
-networks:
-  net:
-    external: true
