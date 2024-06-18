@@ -154,7 +154,7 @@ const ChatView: React.FC = () => {
         <TextareaAutosize
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Message..."
+          placeholder="Tapez votre message ici..."
           className="message-input"
 		  minRows={1}
 		  maxRows={3}
