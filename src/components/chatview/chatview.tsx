@@ -19,9 +19,9 @@ const ChatView: React.FC = () => {
   const socketRef = useRef<Socket | null>(null);
   const lastMessageRef = useRef<HTMLLIElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const socket = io(SERVER_URL)
 
   useEffect(() => {
+	const socket = io(SERVER_URL)
 	socketRef.current = socket;
 
     socket.on('connect', () => {
