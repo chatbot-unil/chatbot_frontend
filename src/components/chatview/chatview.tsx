@@ -7,6 +7,7 @@ import Message, { MessageType, MessageStatus, MessageProps } from '../message/me
 import './chatview.css';
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
+// const SERVER_URL = '/socket.io/';
 
 const ChatView: React.FC = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
@@ -18,10 +19,10 @@ const ChatView: React.FC = () => {
   const socketRef = useRef<Socket | null>(null);
   const lastMessageRef = useRef<HTMLLIElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const socket = io(SERVER_URL)
 
   useEffect(() => {
-    const socket = io(SERVER_URL);
-    socketRef.current = socket;
+	socketRef.current = socket;
 
     socket.on('connect', () => {
       console.log(`Connecté au serveur avec l'ID: ${socket.id}`);
@@ -100,6 +101,15 @@ const ChatView: React.FC = () => {
     }
   }, [sessionId, newMessage]);
 
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendMessage(event);
+    } else if (event.key === 'Enter' && event.ctrlKey) {
+      setNewMessage(prevMessage => prevMessage + '\n');
+    }
+  }, [handleSendMessage]);
+
   const scrollToLastMessage = useCallback(() => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -153,6 +163,7 @@ const ChatView: React.FC = () => {
       <Box component="form" onSubmit={handleSendMessage} className="message-form">
         <TextareaAutosize
           value={newMessage}
+		  onKeyDown={handleKeyDown}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Tapez votre message ici..."
           className="message-input"
