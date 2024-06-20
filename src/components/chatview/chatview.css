@@ -36,7 +36,7 @@
   }
   
   .message-input {
-	flex: 1;
+	flex-grow: 1;
 	min-height: 25px;
 	max-height: 200px;
 	resize: vertical;
@@ -50,7 +50,7 @@
   .send-button {
 	width: 50px;
 	height: 50px;
-	background-color: #007bff;
+	background-color: #007bff !important;
 	color: white;
 	border: none;
 	border-radius: 50%;
@@ -60,15 +60,22 @@
 	justify-content: center;
   }
   
+  .send-button.receiving {
+	background-color: #cccccc !important;
+  }
+
   .send-button:disabled {
-	background-color: #cccccc;
 	cursor: not-allowed;
   }
-  
-  .send-button:hover {
-	background-color: #0056b3;
+
+  .send-button:not(.receiving):hover {
+	background-color: #0056b3 !important;
   }
   
+  .send-icon {
+	color: white;
+  }
+
   .scroll-button-container {
 	display: flex;
 	justify-content: center;

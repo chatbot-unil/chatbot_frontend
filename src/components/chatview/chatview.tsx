@@ -7,7 +7,6 @@ import Message, { MessageType, MessageStatus, MessageProps } from '../message/me
 import './chatview.css';
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
-// const SERVER_URL = '/socket.io/';
 
 const ChatView: React.FC = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
@@ -155,7 +154,7 @@ const ChatView: React.FC = () => {
         {!isLastMessageInView && (
 			<Box className="scroll-button-container">
 				<IconButton onClick={scrollToLastMessage} className="scroll-button">
-				<ArrowDownwardIcon sx={{ color: 'white' }} />
+					<ArrowDownwardIcon sx={{ color: 'white' }} />
 				</IconButton>
 			</Box>
         )}
@@ -169,24 +168,14 @@ const ChatView: React.FC = () => {
           className="message-input"
 		  minRows={1}
 		  maxRows={3}
-          style={{ flexGrow: 1, borderRadius: 20, padding: 10, border: '1px solid #ccc' }}
         />
-        <IconButton
-          type="submit"
-          className="send-button"
-          sx={{
-            backgroundColor: isReciving ? '#cccccc' : '#007bff',
-            '&:hover': {
-              backgroundColor: isReciving ? '#cccccc' : '#0056b3',
-            },
-            color: 'white',
-			width: '50px',
-            height: '50px',
-            cursor: isReciving ? 'not-allowed' : 'pointer',
-          }}
-        >
-          <SendIcon style={{ color: 'white' }} />
-        </IconButton>
+		<IconButton
+			type="submit"
+			className={`send-button ${isReciving ? 'receiving' : ''}`}
+			disabled={isReciving}
+		>
+			<SendIcon className="send-icon" />
+		</IconButton>
       </Box>
     </Box>
   );
