@@ -1,0 +1,17 @@
+.sidebar-container {
+	height: 100%;
+	background-color: #007bff;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+  }
+  
+  .sidebar-header {
+	margin-bottom: 20px;
+  }
+  
+  .MuiListItemIcon-root {
+	color: white;
+  }
+  

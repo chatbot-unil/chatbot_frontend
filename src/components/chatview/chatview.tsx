@@ -152,30 +152,30 @@ const ChatView: React.FC = () => {
           ))}
         </ul>
         {!isLastMessageInView && (
-			<Box className="scroll-button-container">
-				<IconButton onClick={scrollToLastMessage} className="scroll-button">
-					<ArrowDownwardIcon sx={{ color: 'white' }} />
-				</IconButton>
-			</Box>
+          <Box className="scroll-button-container">
+            <IconButton onClick={scrollToLastMessage} className="scroll-button">
+              <ArrowDownwardIcon sx={{ color: 'white' }} />
+            </IconButton>
+          </Box>
         )}
       </Box>
       <Box component="form" onSubmit={handleSendMessage} className="message-form">
         <TextareaAutosize
           value={newMessage}
-		  onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Tapez votre message ici..."
+          placeholder="Type your message here..."
           className="message-input"
-		  minRows={1}
-		  maxRows={3}
+          minRows={1}
+          maxRows={3}
         />
-		<IconButton
-			type="submit"
-			className={`send-button ${isReciving ? 'receiving' : ''}`}
-			disabled={isReciving}
-		>
-			<SendIcon className="send-icon" />
-		</IconButton>
+        <IconButton
+          type="submit"
+          className={`send-button ${isReciving ? 'receiving' : ''}`}
+          disabled={isReciving}
+        >
+          <SendIcon className="send-icon" />
+        </IconButton>
       </Box>
     </Box>
   );
