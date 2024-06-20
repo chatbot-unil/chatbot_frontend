@@ -13,8 +13,8 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-	  <Container className="App-header" maxWidth="xl">
-	  <CssBaseline />
+	  <Container className="Chat-container" maxWidth="xl">
+	  	<CssBaseline />
 	  	<ChatView />
 	  </Container>
     </div>

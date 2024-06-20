@@ -5,7 +5,7 @@
 	flex-direction: column;
   }
   
-  .App-header {
+  .Chat-container {
 	min-height: 20vh;
 	display: flex;
 	flex-direction: column;
