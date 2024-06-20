@@ -122,15 +122,7 @@
 	  width: 40px;
 	  height: 40px;
 	}
-  }
-  
-  @media screen and (max-width: 600px) {
-	.send-button {
-	  width: 40px;
-	  height: 40px;
-	}
-	.scroll-button {
-	  width: 40px;
-	  height: 40px;
-	}
+	img {
+		max-width: 350px;
+	}	
   }
