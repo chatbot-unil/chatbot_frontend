@@ -9,7 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../../assets/UNIL_logo.png";
 import "./welcomebar.css";
 
-const WelcomeBarComponent = ({ handleOpenCloseNavMenu }: { handleOpenCloseNavMenu: () => void }) => {
+interface WelcomeBarProps {
+	handleOpenCloseNavMenu: () => void;
+}
+
+const WelcomeBarComponent = ({ handleOpenCloseNavMenu }: WelcomeBarProps) => {
   return (
     <AppBar position="fixed" className="AppBar">
       <Toolbar>
