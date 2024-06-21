@@ -180,7 +180,6 @@ const ChatView: React.FC = () => {
         </IconButton>
       </Box>
     </Box>
-	
   );
 };
 
