@@ -5,8 +5,6 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SendIcon from '@mui/icons-material/Send';
 import Message, { MessageType, MessageStatus, MessageProps } from '../message/message';
 import './chatview.css';
-import Fab from '@mui/material/Fab';
-import NavigationIcon from '@mui/icons-material/Navigation';
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 

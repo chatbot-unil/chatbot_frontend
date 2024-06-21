@@ -13,19 +13,6 @@
 	margin-top: 90px;
 }
 
-.app-logo {
-	height: 60px;
-	margin: 15px;
-}
-  
-.AppBar {
-	background-color: #007bff !important;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1000;
-}
-
 .Sidebar {
 	background-color: #007bff;
 	color: white;

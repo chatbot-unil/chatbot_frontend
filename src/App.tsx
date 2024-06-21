@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   CssBaseline,
   AppBar,
@@ -13,31 +13,19 @@ import "./App.css";
 import logo from "./assets/UNIL_logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
+import { useState } from "react";
+import WelcomeBarComponent from "./components/welcomebar/welcomebar";
 
 function App() {
 	const [showNavMenu, setShowNavMenu] = React.useState(false);
 
-	const handleOpenCloseNavMenu = () => {
-		setShowNavMenu(!showNavMenu);
-	}
-	
+	const handleOpenCloseNavMenu = useCallback(() => {
+		setShowNavMenu((prev) => !prev);
+	} , [setShowNavMenu]);
+
   return (
     <Box className="App">
-      <AppBar position="fixed" className="AppBar">
-        <Toolbar>
-			<IconButton
-				size="large"
-				edge="start"
-				color="inherit"
-				aria-label="menu"
-				sx={{ mr: 2 }}
-				onClick={handleOpenCloseNavMenu}
-			>
-            <MenuIcon />
-          </IconButton>
-          <img src={logo} alt="UNIL Logo" className="app-logo" />
-        </Toolbar>
-      </AppBar>
+      <WelcomeBarComponent handleOpenCloseNavMenu={handleOpenCloseNavMenu} />
       <Grid container className="App-container">
 	  	<Grid
 			item
