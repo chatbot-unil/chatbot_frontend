@@ -90,6 +90,10 @@
   .scroll-button:hover {
 	background-color: #0056b3 !important;
   }
+
+  img {
+	max-width: 650px;
+  }
   
   @media screen and (max-width: 900px) {
 	.message {

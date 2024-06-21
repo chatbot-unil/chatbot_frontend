@@ -12,6 +12,6 @@
   }
   
   .MuiListItemIcon-root {
-	color: white;
+	color: white !important;
   }
   
