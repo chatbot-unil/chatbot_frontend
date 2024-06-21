@@ -1,9 +1,8 @@
 import React from "react";
 import {
   Box,
-  Typography,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
@@ -12,28 +11,37 @@ import HelpIcon from "@mui/icons-material/Help";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import "./sidebar.css";
 
-const Sidebar = () => {
+function Sidebar() {
+	const [newChat, setNewChat] = React.useState(false);
+	const [help, setHelp] = React.useState(false);
+	const [contact, setContact] = React.useState(false);
+
+	const handleNewChat = () => {
+		setNewChat(true);
+		alert("Pas encore implémenté");
+	}
+
   return (
     <Box className="sidebar-container">
       <List>
-        <ListItem button>
+        <ListItemButton onClick={handleNewChat}>
           <ListItemIcon>
             <ChatIcon />
           </ListItemIcon>
           <ListItemText primary="Nouveau Chat" />
-        </ListItem>
-        <ListItem button>
+        </ListItemButton>
+        <ListItemButton>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>
           <ListItemText primary="Aide" />
-        </ListItem>
-        <ListItem button>
+        </ListItemButton>
+        <ListItemButton>
           <ListItemIcon>
             <ContactMailIcon />
           </ListItemIcon>
           <ListItemText primary="Nous contacter" />
-        </ListItem>
+        </ListItemButton>
       </List>
     </Box>
   );
