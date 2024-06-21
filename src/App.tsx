@@ -23,7 +23,7 @@ function App() {
 	
   return (
     <Box className="App">
-      <AppBar position="sticky" className="AppBar">
+      <AppBar position="fixed" className="AppBar">
         <Toolbar>
 			<IconButton
 				size="large"
