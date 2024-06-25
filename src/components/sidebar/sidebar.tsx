@@ -1,5 +1,5 @@
 // src/components/sidebar/Sidebar.tsx
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   List,
@@ -13,9 +13,15 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ChatManager from "../chatview/chatmanager";
 import "./sidebar.css";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+	sideBarState: boolean;
+	setSideBarState: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ sideBarState, setSideBarState }) => {
   const handleNewChat = () => {
     ChatManager.getInstance().createNewSession();
+	setSideBarState(false);
   };
 
   return (

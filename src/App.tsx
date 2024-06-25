@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid, Box } from "@mui/material";
 import ChatView from "./components/chatview/chatview";
 import Sidebar from "./components/sidebar/sidebar";
@@ -38,7 +38,7 @@ function App() {
           xl={showNavMenu ? 2 : 0}
           className={`Sidebar ${showNavMenu ? 'show' : 'hide'}`}
         >
-          <Sidebar />
+          <Sidebar sideBarState={showNavMenu} setSideBarState={setShowNavMenu} />
         </Grid>
         <Grid item xs={12} sm={12} md={showNavMenu ? 9 : 12} lg={showNavMenu ? 9 : 12} xl={showNavMenu ? 10 : 12} className="Chat-container">
           <ChatView messages={messages} />
