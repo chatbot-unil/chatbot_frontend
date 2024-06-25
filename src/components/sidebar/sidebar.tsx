@@ -1,3 +1,4 @@
+// src/components/sidebar/Sidebar.tsx
 import React from "react";
 import {
   Box,
@@ -9,17 +10,13 @@ import {
 import ChatIcon from "@mui/icons-material/Chat";
 import HelpIcon from "@mui/icons-material/Help";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
+import ChatManager from "../chatview/chatmanager";
 import "./sidebar.css";
 
-function Sidebar() {
-	const [newChat, setNewChat] = React.useState(false);
-	const [help, setHelp] = React.useState(false);
-	const [contact, setContact] = React.useState(false);
-
-	const handleNewChat = () => {
-		setNewChat(true);
-		alert("Pas encore implémenté");
-	}
+const Sidebar: React.FC = () => {
+  const handleNewChat = () => {
+    ChatManager.getInstance().createNewSession();
+  };
 
   return (
     <Box className="sidebar-container">
