@@ -10,6 +10,7 @@ import {
 import ChatIcon from "@mui/icons-material/Chat";
 import HelpIcon from "@mui/icons-material/Help";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
+import AddCommentIcon from '@mui/icons-material/AddComment';
 import "./sidebar.css";
 
 interface SidebarProps {
@@ -25,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCre
       	<List className="new-session-button">
 			<ListItemButton onClick={onCreateNewChat}>
 			<ListItemIcon>
-				<ChatIcon />
+				<AddCommentIcon />
 			</ListItemIcon>
 			<ListItemText primary="Nouveau Chat" />
         </ListItemButton>
