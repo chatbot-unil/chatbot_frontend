@@ -1,5 +1,5 @@
 // src/components/sidebar/Sidebar.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   List,
@@ -10,29 +10,41 @@ import {
 import ChatIcon from "@mui/icons-material/Chat";
 import HelpIcon from "@mui/icons-material/Help";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
-import ChatManager from "../chatview/chatmanager";
 import "./sidebar.css";
 
 interface SidebarProps {
-	sideBarState: boolean;
-	setSideBarState: React.Dispatch<React.SetStateAction<boolean>>;
+	listSessions: string[];
+	onCreateNewChat: () => void;
+	onRestoreSession: (sessionId: string) => void;
+	activeSessionId: string | null;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ sideBarState, setSideBarState }) => {
-  const handleNewChat = () => {
-    ChatManager.getInstance().createNewSession();
-	setSideBarState(false);
-  };
-
+const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCreateNewChat, activeSessionId }) => {
   return (
     <Box className="sidebar-container">
-      <List>
-        <ListItemButton onClick={handleNewChat}>
-          <ListItemIcon>
-            <ChatIcon />
-          </ListItemIcon>
-          <ListItemText primary="Nouveau Chat" />
+      	<List className="new-session-button">
+			<ListItemButton onClick={onCreateNewChat}>
+			<ListItemIcon>
+				<ChatIcon />
+			</ListItemIcon>
+			<ListItemText primary="Nouveau Chat" />
         </ListItemButton>
+	  	</List>
+		<List className="sessions-list">
+			{listSessions.flat().map((sessionId) => (
+				<ListItemButton 
+					key={sessionId}
+					className={`session-item ${sessionId === activeSessionId ? 'active-session' : ''}`}
+					onClick={() => onRestoreSession(sessionId)}
+				>
+					<ListItemIcon>
+						<ChatIcon />
+					</ListItemIcon>
+					<ListItemText primary={`Session ${sessionId}`} />
+				</ListItemButton>
+			))}
+		</List>
+		<List className="fixed-bottom">
         <ListItemButton>
           <ListItemIcon>
             <HelpIcon />
