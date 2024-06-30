@@ -123,7 +123,10 @@ class ChatManager {
 	localStorage.removeItem('userUUID');
 	try {
 		const response = await fetch(`${SERVER_URL}/create_user`, {
-			method: 'GET',
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json'
+			},
 		});
 		const data = await response.json();
 		console.log(`Received new user UUID: ${data.user_uuid}`);
