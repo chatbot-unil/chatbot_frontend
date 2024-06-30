@@ -61,7 +61,7 @@ function App() {
 	  }
       const sessions = await chatManager.getUserSessions();
       console.log('Fetched sessions:', sessions);
-      setListSessions(sessions);
+      setListSessions(sessions.reverse());
 
       if (sessions.length > 0) {
         const storedSessionId = localStorage.getItem('sessionId');
