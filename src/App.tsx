@@ -97,9 +97,9 @@ function App() {
       setActiveSession(newSessionId);
 	  localStorage.setItem('sessionId', newSessionId);
 	  console.log('New session:', newSessionId);
-	  initApp();
+	  initSessions();
     });
-    initApp();
+    initSessions();
     return () => {
       chatManager.disconnect();
     };
@@ -116,9 +116,22 @@ function App() {
     setShowNavMenu(false);
   }, [chatManager]);
 
-  const initApp = useCallback(async () => {
+
+  const initSessions = useCallback(async () => {
     try {
       console.log('Initializing app...');
+	  if (!chatManager.getUserUUID()) {
+		console.log('No user UUID found, creating new one');
+		await chatManager.createUserUUID();
+	  } else {
+		const isUserUUIDValid = await chatManager.testIfUserUUIDExists();
+		console.log('User UUID valid:', isUserUUIDValid);
+		if (!isUserUUIDValid) {
+			console.log('User UUID invalid, creating new one');
+			await chatManager.createUserUUID();
+			console.log('New user UUID created');
+		}
+	  }
       const sessions = await chatManager.getUserSessions();
       console.log('Fetched sessions:', sessions);
       setListSessions(sessions);

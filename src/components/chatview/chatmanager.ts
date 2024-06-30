@@ -101,13 +101,14 @@ class ChatManager {
 		console.error(error);
 	});
 
-	this.socket.on('create_user', (data) => {
-		console.log(`Received new user UUID: ${data.user_uuid}`);
-		localStorage.setItem('userUUID', data.user_uuid);
-		this.userUUID = data.user_uuid;
-		console.log(`Stored new user UUID: ${this.userUUID}`);
-		this.socket!.emit('init', { user_uuid: this.userUUID });
-	});
+	// this.socket.on('create_user', (data) => {
+	// 	localStorage.removeItem('userUUID');
+	// 	console.log(`Received new user UUID: ${data.user_uuid}`);
+	// 	localStorage.setItem('userUUID', data.user_uuid);
+	// 	this.userUUID = data.user_uuid;
+	// 	console.log(`Stored new user UUID: ${this.userUUID}`);
+	// 	this.socket!.emit('init', { user_uuid: this.userUUID });
+	// });
   }
 
   public sendMessage(content: string) {
@@ -127,10 +128,39 @@ class ChatManager {
     this.socket?.emit('init', { user_uuid: this.userUUID });
   }
 
-  private createUserUUID() {
-    if (this.userUUID === null) {
-      this.socket?.emit('create_user');
-    }
+  public async createUserUUID() {
+	localStorage.removeItem('userUUID');
+	try {
+		const response = await fetch(`${SERVER_URL}/create_user`, {
+			method: 'GET',
+		});
+		const data = await response.json();
+		console.log(`Received new user UUID: ${data.user_uuid}`);
+		localStorage.setItem('userUUID', data.user_uuid);
+		this.userUUID = data.user_uuid;
+		console.log(`Stored new user UUID: ${this.userUUID}`);
+	} catch (error) {
+		console.error('Error creating user UUID:', error);
+	}
+  }
+
+  public getUserUUID(): string | null {
+	return this.userUUID;
+  }
+
+  public async testIfUserUUIDExists() {
+	if (!this.userUUID) {
+	  return false;
+	} else if (this.userUUID) {
+	  try {
+		const response = await fetch(`${SERVER_URL}/check_user_exists/${this.userUUID}`);
+		const data = await response.json();
+		console.log('User exists:', data.user_exists);
+		return data.user_exists;
+	  } catch (error) {
+		console.error('Error checking if user exists:', error);
+	  }
+	}
   }
 
   private updateMessages() {
@@ -165,21 +195,6 @@ class ChatManager {
 
   public getStoredSessionId(): string | null {
 	return this.sessionId;
-  }
-
-  public async testIfUserUUIDExists() {
-	if (!this.userUUID) {
-	  this.createUserUUID();
-	} else {
-	  try {
-		const response = await fetch(`${SERVER_URL}/check_user_exists/${this.userUUID}`);
-		const data = await response.json();
-		console.log('User exists:', data.user_exists);
-		return data.user_exists;
-	  } catch (error) {
-		console.error('Error checking if user exists:', error);
-	  }
-	}
   }
 
   public disconnect() {
