@@ -100,15 +100,6 @@ class ChatManager {
 	this.socket.on('error', (error) => {
 		console.error(error);
 	});
-
-	// this.socket.on('create_user', (data) => {
-	// 	localStorage.removeItem('userUUID');
-	// 	console.log(`Received new user UUID: ${data.user_uuid}`);
-	// 	localStorage.setItem('userUUID', data.user_uuid);
-	// 	this.userUUID = data.user_uuid;
-	// 	console.log(`Stored new user UUID: ${this.userUUID}`);
-	// 	this.socket!.emit('init', { user_uuid: this.userUUID });
-	// });
   }
 
   public sendMessage(content: string) {
