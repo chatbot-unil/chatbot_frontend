@@ -21,10 +21,6 @@
 	max-height: 70%;
 	min-width: 200px;
   }
-
-  .sessions-list::-webkit-scrollbar {
-	width: 0.5em;
-  }
   
   .fixed-bottom {
 	flex-shrink: 0;
