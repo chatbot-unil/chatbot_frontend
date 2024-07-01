@@ -1,10 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
-import { Grid, Box } from "@mui/material";
+import { 
+	useCallback, 
+	useEffect, 
+	useState 
+} from "react";
+import { 
+	Grid, 
+	Box
+} from "@mui/material";
 import ChatView from "./components/chatview/chatview";
 import Sidebar from "./components/sidebar/sidebar";
 import WelcomeBarComponent from "./components/welcomebar/welcomebar";
 import ChatManager from "./components/chatview/chatmanager";
-import { MessageProps } from "./components/message/message";
+import AideModal from "./components/moadalhelp/modalhelp";
+import ContactModal from "./components/modalcontact/modalcontact";
+import { 
+	MessageProps 
+} from "./components/message/message";
 import "./App.css";
 
 function App() {
@@ -13,24 +24,20 @@ function App() {
   const [listSessions, setListSessions] = useState<string[]>([]);
   const [chatManager] = useState(ChatManager.getInstance());
   const [activeSession, setActiveSession] = useState<string | null>(() => localStorage.getItem('sessionId'));
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
+  const handleOpenCloseHelpModal = () => {
+	setHelpModalOpen((prev) => !prev);
+  };
+
+  const handleOpenCloseContactModal = () => {
+	setContactModalOpen((prev) => !prev);
+  }
 
   const handleOpenCloseNavMenu = () => {
     setShowNavMenu((prev) => !prev);
   };
-
-  useEffect(() => {
-    chatManager.setCallback(setMessages);
-    chatManager.setNewSessionCallback((newSessionId) => {
-      setActiveSession(newSessionId);
-	  localStorage.setItem('sessionId', newSessionId);
-	  console.log('New session:', newSessionId);
-	  initSessions();
-    });
-    initSessions();
-    return () => {
-      chatManager.disconnect();
-    };
-  }, [chatManager]);
 
   const handleRestoreSession = useCallback((sessionId: string) => {
     chatManager.restoreSession(sessionId);
@@ -40,51 +47,53 @@ function App() {
 
   const handleCreateNewChat = useCallback(() => {
     chatManager.createNewSession();
-    setShowNavMenu(false);
+	setShowNavMenu(false);
   }, [chatManager]);
-
 
   const initSessions = useCallback(async () => {
     try {
-      console.log('Initializing app...');
 	  if (!chatManager.getUserUUID()) {
-		console.log('No user UUID found, creating new one');
 		await chatManager.createUserUUID();
 	  } else {
 		const isUserUUIDValid = await chatManager.testIfUserUUIDExists();
-		console.log('User UUID valid:', isUserUUIDValid);
 		if (!isUserUUIDValid) {
-			console.log('User UUID invalid, creating new one');
 			await chatManager.createUserUUID();
-			console.log('New user UUID created');
 		}
 	  }
-      const sessions = await chatManager.getUserSessions();
-      console.log('Fetched sessions:', sessions);
-      setListSessions(sessions.reverse());
+      const sessions = (await chatManager.getUserSessions()).reverse().flat();
+      setListSessions(sessions);
 
       if (sessions.length > 0) {
         const storedSessionId = localStorage.getItem('sessionId');
-        const flattenedSessions = sessions.flat();
 
-        if (storedSessionId && flattenedSessions.includes(storedSessionId)) {
-          console.log('Using stored session:', storedSessionId);
+        if (storedSessionId && sessions.includes(storedSessionId)) {
           setActiveSession(storedSessionId);
           chatManager.restoreSession(storedSessionId);
         } else {
-          console.log('No stored session found, restoring first session:', flattenedSessions[0]);
-          setActiveSession(flattenedSessions[0]);
-          localStorage.setItem('sessionId', flattenedSessions[0]);
-          chatManager.restoreSession(flattenedSessions[0]);
+          setActiveSession(sessions[0]);
+          localStorage.setItem('sessionId', sessions[0]);
+          chatManager.restoreSession(sessions[0]);
         }
       } else {
-        console.log('No sessions found, creating new chat');
         chatManager.createNewSession();
       }
     } catch (error) {
       console.error('Error in initApp:', error);
     }
-  }, [chatManager, handleCreateNewChat]);
+  }, [chatManager]);
+
+  useEffect(() => {
+    chatManager.setCallback(setMessages);
+    chatManager.setNewSessionCallback((newSessionId) => {
+      setActiveSession(newSessionId);
+	  localStorage.setItem('sessionId', newSessionId);
+	  initSessions();
+    });
+    initSessions();
+    return () => {
+      chatManager.disconnect();
+    };
+  }, [chatManager, initSessions]);
 
   return (
     <Box className="App">
@@ -104,6 +113,8 @@ function App() {
             onRestoreSession={handleRestoreSession}
             onCreateNewChat={handleCreateNewChat}
             activeSessionId={activeSession}
+			onHelpClick={handleOpenCloseHelpModal}
+			onContactClick={handleOpenCloseContactModal}
           />
         </Grid>
         <Grid
@@ -118,6 +129,8 @@ function App() {
           <ChatView messages={messages} />
         </Grid>
       </Grid>
+	  <AideModal open={helpModalOpen} handleClose={handleOpenCloseHelpModal} />
+	  <ContactModal open={contactModalOpen} handleClose={handleOpenCloseContactModal} />
     </Box>
   );
 }

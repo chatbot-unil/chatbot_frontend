@@ -1,6 +1,12 @@
 // src/components/chatview/ChatManager.ts
-import io, { Socket } from 'socket.io-client';
-import { MessageProps, MessageType, MessageStatus } from '../message/message';
+import io, { 
+	Socket 
+} from 'socket.io-client';
+import { 
+	MessageProps, 
+	MessageType, 
+	MessageStatus 
+} from '../message/message';
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 
@@ -41,9 +47,7 @@ class ChatManager {
     this.socket = io(SERVER_URL);
 
     this.socket.on('connect', () => {
-      console.log(`Connected to server with ID: ${this.socket!.id}`);
 	  if (!this.userUUID) {
-        console.log('No user UUID found, creating new one');
         this.createUserUUID();
 	  } else if (this.sessionId) {
         this.socket!.emit('restore_session', { session_id: this.sessionId });
@@ -56,11 +60,8 @@ class ChatManager {
       this.sessionId = data.session_id;
       this.messages.push({ type: MessageType.Bot, content: data.initial_message });
       this.updateMessages();
-      console.log(`Session initialized with ID: ${data.session_id}`);
 	  if (this.newSessionCallback) {
-		console.log('Calling new session callback');
 		this.newSessionCallback(data.session_id);
-		console.log('New session callback called');
 	  }
     });
 
@@ -69,11 +70,9 @@ class ChatManager {
       this.sessionId = data.session_id;
       this.messages = data.chat_history;
       this.updateMessages();
-      console.log(`Session restored with ID: ${data.session_id}`);
     });
 
     this.socket.on('response_start', () => {
-      console.log('Response started');
       this.messages.push({ type: MessageType.Bot, content: '', status: MessageStatus.Ongoing });
       this.updateMessages();
     });
@@ -129,10 +128,8 @@ class ChatManager {
 			},
 		});
 		const data = await response.json();
-		console.log(`Received new user UUID: ${data.user_uuid}`);
 		localStorage.setItem('userUUID', data.user_uuid);
 		this.userUUID = data.user_uuid;
-		console.log(`Stored new user UUID: ${this.userUUID}`);
 	} catch (error) {
 		console.error('Error creating user UUID:', error);
 	}
@@ -171,7 +168,6 @@ class ChatManager {
           throw new Error(`Error fetching sessions: ${response.statusText}`);
         }
         const { session_ids } = await response.json();
-        console.log('User sessions:', session_ids);
         return session_ids || [];
       } catch (error) {
         console.error('Failed to fetch user sessions:', error);

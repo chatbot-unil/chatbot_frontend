@@ -1,5 +1,5 @@
 // src/components/sidebar/Sidebar.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Box,
   List,
@@ -18,9 +18,11 @@ interface SidebarProps {
 	onCreateNewChat: () => void;
 	onRestoreSession: (sessionId: string) => void;
 	activeSessionId: string | null;
+	onHelpClick: () => void;
+	onContactClick: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCreateNewChat, activeSessionId }) => {
+const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCreateNewChat, activeSessionId, onHelpClick, onContactClick }) => {
   return (
     <Box className="sidebar-container">
       	<List className="new-session-button">
@@ -32,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCre
         </ListItemButton>
 	  	</List>
 		<List className="sessions-list">
-			{listSessions.flat().map((sessionId) => (
+			{listSessions.map((sessionId) => (
 				<ListItemButton 
 					key={sessionId}
 					className={`session-item ${sessionId === activeSessionId ? 'active-session' : ''}`}
@@ -46,13 +48,13 @@ const Sidebar: React.FC<SidebarProps> = ({ listSessions, onRestoreSession, onCre
 			))}
 		</List>
 		<List className="fixed-bottom">
-        <ListItemButton>
+        <ListItemButton onClick={onHelpClick}>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>
-          <ListItemText primary="Aide" />
+          <ListItemText primary="Aide & Informations" />
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton onClick={onContactClick}>
           <ListItemIcon>
             <ContactMailIcon />
           </ListItemIcon>
