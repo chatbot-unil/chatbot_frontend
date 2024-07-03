@@ -1,47 +1,45 @@
 .App {
 	text-align: center;
-	height: 100vh;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-  }
-  
-  .App-header {
-	background-color: #282c34;
-	min-height: 20vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	font-size: calc(10px + 2vmin);
-	color: white;
-  }
-  
-  /* You might want to adjust or remove this if it doesn't fit your design */
-  .App-logo {
-	height: 40vmin;
-	pointer-events: none;
-  }
-  
-  body {
 	overflow: hidden;
-  }
+}
 
-  /* This makes sure the chat view stretches properly */
-  @media (prefers-reduced-motion: no-preference) {
-	.App-logo {
-	  animation: App-logo-spin infinite 20s linear;
-	}
-  }
-  
-  /* Ensure your animations or additional styles don't interfere with chat functionality */
-  @keyframes App-logo-spin {
-	from {
-	  transform: rotate(0deg);
-	}
-	to {
-	  transform: rotate(360deg);
-	}
-  }
-  
+.App-container {
+	flex: 1;
+	display: flex;
+	overflow: hidden;
+	height: 100%;
+	margin-top: 90px;
+}
+
+.Sidebar {
+	background-color: #007bff;
+	color: white;
+	height: 100vh;
+}
+
+.Sidebar.hide {
+	display: none;
+}
+
+.Sidebar.show {
+	display: flex;
+	flex-direction: column;
+}
+
+.Chat-container {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	width: 100%;
+	height: calc(100vh - 90px);
+}
+
+.ChatView {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: white;
+}

@@ -1,13 +1,9 @@
-  .chat-container {
+.chat-container {
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	background: #f9f9f9;
-	border-radius: 8px;
 	display: flex;
 	flex-direction: column;
-	position: relative;
   }
   
   .chat-message-list {
@@ -20,7 +16,7 @@
   .messages-list {
 	flex: 1;
 	overflow-y: auto;
-	margin-bottom: 10px;
+	margin: 0 0 0 0;
 	display: flex;
 	flex-direction: column;
 	padding: 0;
@@ -63,11 +59,11 @@
   .send-button.receiving {
 	background-color: #cccccc !important;
   }
-
+  
   .send-button:disabled {
 	cursor: not-allowed;
   }
-
+  
   .send-button:not(.receiving):hover {
 	background-color: #0056b3 !important;
   }
@@ -75,7 +71,7 @@
   .send-icon {
 	color: white;
   }
-
+  
   .scroll-button-container {
 	display: flex;
 	justify-content: center;
@@ -92,6 +88,10 @@
   
   .scroll-button:hover {
 	background-color: #0056b3 !important;
+  }
+
+  img {
+	max-width: 650px;
   }
   
   @media screen and (max-width: 900px) {
@@ -123,6 +123,7 @@
 	  height: 40px;
 	}
 	img {
-		max-width: 350px;
-	}	
+	  max-width: 350px;
+	}
   }
+  
