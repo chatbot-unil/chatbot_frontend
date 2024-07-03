@@ -9,9 +9,10 @@ import './chatview.css';
 
 interface ChatViewProps {
   messages: MessageProps[];
+  isSidebarOpen: boolean;
 }
 
-const ChatView: React.FC<ChatViewProps> = ({ messages }) => {
+const ChatView: React.FC<ChatViewProps> = ({ messages, isSidebarOpen }) => {
   const [newMessage, setNewMessage] = useState('');
   const [isLastMessageInView, setIsLastMessageInView] = useState(false);
   const [isReciving, setIsReciving] = useState(false);
@@ -98,7 +99,7 @@ const ChatView: React.FC<ChatViewProps> = ({ messages }) => {
           </IconButton>
         </Box>
       )}
-      <Box component="form" onSubmit={handleSendMessage} className="message-form">
+      <Box component="form" onSubmit={handleSendMessage} className={`message-form ${isSidebarOpen ? 'hide' : ''}`}>
         <TextareaAutosize
           value={newMessage}
           onKeyDown={handleKeyDown}

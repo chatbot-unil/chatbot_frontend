@@ -126,7 +126,7 @@ function App() {
           xl={showNavMenu ? 10 : 12}
           className="Chat-container"
         >
-          <ChatView messages={messages} />
+          <ChatView messages={messages} isSidebarOpen={showNavMenu} />
         </Grid>
       </Grid>
 	  <AideModal open={helpModalOpen} handleClose={handleOpenCloseHelpModal} />
