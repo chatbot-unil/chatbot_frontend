@@ -68,6 +68,15 @@ const ChatView: React.FC<ChatViewProps> = ({ messages }) => {
     };
   }, [messages]);
 
+  useEffect(() => {
+	const handleResize = () => {
+	  window.scrollTo(0, 0);
+	  document.body.scrollTop = 0;
+	};
+	window.addEventListener('resize', handleResize);
+	return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <Box className="chat-container">
       <Box className="chat-message-list">

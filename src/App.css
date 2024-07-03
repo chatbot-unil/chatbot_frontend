@@ -36,6 +36,7 @@
 	overflow-y: auto;
 	width: 100%;
 	height: calc(100vh - 90px);
+	min-height: 0;
 }
 
 .ChatView {
