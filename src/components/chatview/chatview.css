@@ -144,7 +144,12 @@
 	  z-index: -1;
 	}
 	
-	.chat-message-list {
-	  margin-bottom: 60px;
+	.messages-list {
+	  padding-bottom: 50px;
+	}
+
+	.scroll-button-container {
+		position: relative;
+		bottom: 75px;
 	}
   }

@@ -33,9 +33,3 @@
   .session-item.active-session:hover {
 	background-color: rgba(0, 0, 255, 0.2); /* Adjust the color as needed */
   }
-
-  @media screen and (max-width: 480px) {
-	.sidebar-container {
-		z-index: 1000;
-	}
-  }
