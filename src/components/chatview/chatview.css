@@ -39,7 +39,7 @@
 	resize: vertical;
 	padding: 10px;
 	border: 1px solid #ccc;
-	border-radius: 20px;
+	border-radius: 10px;
 	margin-right: 10px;
 	overflow-y: auto;
   }
