@@ -10,6 +10,7 @@ import {
 
 const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
 
+// const SERVER_URL = 'http://localhost:80';
 class ChatManager {
   private static instance: ChatManager;
   private socket: Socket | null = null;
