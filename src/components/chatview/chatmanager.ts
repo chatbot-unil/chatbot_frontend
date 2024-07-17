@@ -8,9 +8,9 @@ import {
 	MessageStatus 
 } from '../message/message';
 
-const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`;
+const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}/api/v1`;
 
-// const SERVER_URL = 'http://localhost:80';
+const SOCKET_URL = `http://${process.env.REACT_APP_BACKEND_HOST}`;
 class ChatManager {
   private static instance: ChatManager;
   private socket: Socket | null = null;
@@ -45,7 +45,7 @@ class ChatManager {
   }
 
   private initSocket() {
-    this.socket = io(SERVER_URL);
+    this.socket = io(SOCKET_URL);
 
     this.socket.on('connect', () => {
 	  if (!this.userUUID) {
