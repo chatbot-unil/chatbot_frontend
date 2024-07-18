@@ -7,10 +7,8 @@ import {
 	MessageType, 
 	MessageStatus 
 } from '../message/message';
+import Config from '../../config/config';
 
-const SERVER_URL = `http://${process.env.REACT_APP_BACKEND_HOST}/api/v1`;
-
-const SOCKET_URL = `http://${process.env.REACT_APP_BACKEND_HOST}`;
 class ChatManager {
   private static instance: ChatManager;
   private socket: Socket | null = null;
@@ -45,7 +43,7 @@ class ChatManager {
   }
 
   private initSocket() {
-    this.socket = io(SOCKET_URL);
+    this.socket = io(Config.SOCKET_URL);
 
     this.socket.on('connect', () => {
 	  if (!this.userUUID) {
@@ -122,7 +120,7 @@ class ChatManager {
   public async createUserUUID() {
 	localStorage.removeItem('userUUID');
 	try {
-		const response = await fetch(`${SERVER_URL}/create_user`, {
+		const response = await fetch(`${Config.API_URL}/create_user`, {
 			method: 'POST',
 			headers: {
 			'Content-Type': 'application/json'
@@ -145,7 +143,7 @@ class ChatManager {
 	  return false;
 	} else if (this.userUUID) {
 	  try {
-		const response = await fetch(`${SERVER_URL}/check_user_exists/${this.userUUID}`);
+		const response = await fetch(`${Config.API_URL}/check_user_exists/${this.userUUID}`);
 		const data = await response.json();
 		console.log('User exists:', data.user_exists);
 		return data.user_exists;
@@ -164,7 +162,7 @@ class ChatManager {
   public async getUserSessions(): Promise<string[]> {
     if (this.userUUID) {
       try {
-        const response = await fetch(`${SERVER_URL}/get_user_sessions/${this.userUUID}`);
+        const response = await fetch(`${Config.API_URL}/get_user_sessions/${this.userUUID}`);
         if (!response.ok) {
           throw new Error(`Error fetching sessions: ${response.statusText}`);
         }
