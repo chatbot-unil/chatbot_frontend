@@ -37,7 +37,7 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, isSidebarOpen }) => {
       handleSendMessage(event as unknown as FormEvent);
     } else if (event.key === 'Enter' && event.ctrlKey) {
       setNewMessage(prevMessage => prevMessage + '\n');
-    }
+	}
   }, [handleSendMessage]);
 
   const scrollToLastMessage = useCallback(() => {

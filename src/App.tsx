@@ -82,16 +82,30 @@ function App() {
     }
   }, [chatManager]);
 
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+	if (event.ctrlKey && event.key === 'b') {
+	  event.preventDefault();
+	  handleOpenCloseNavMenu();
+	} else if (event.ctrlKey && event.key === 'n') {
+	  event.preventDefault();
+	  handleCreateNewChat();
+	}
+  }, [handleOpenCloseNavMenu]);
+
   useEffect(() => {
-    chatManager.setCallback(setMessages);
+    chatManager.setNewMessageCallback((newMessages) => {
+	  setMessages(newMessages);
+	});
     chatManager.setNewSessionCallback((newSessionId) => {
       setActiveSession(newSessionId);
 	  localStorage.setItem('sessionId', newSessionId);
 	  initSessions();
     });
     initSessions();
+	window.addEventListener('keydown', handleKeyDown);
     return () => {
       chatManager.disconnect();
+	  window.removeEventListener('keydown', handleKeyDown);
     };
   }, [chatManager, initSessions]);
 

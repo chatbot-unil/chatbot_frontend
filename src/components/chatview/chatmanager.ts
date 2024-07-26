@@ -15,7 +15,7 @@ class ChatManager {
   private sessionId: string | null = localStorage.getItem('sessionId');
   private messages: MessageProps[] = [];
   private userUUID: string | null = localStorage.getItem('userUUID');
-  private callback: ((messages: MessageProps[]) => void) | null = null;
+  private newMessageCallback: ((messages: MessageProps[]) => void) | null = null;
   private newSessionCallback: ((sessionId: string) => void) | null = null;
 
   private constructor() {
@@ -33,9 +33,8 @@ class ChatManager {
 	return this.sessionId;
   }
 
-  public setCallback(callback: (messages: MessageProps[]) => void) {
-    this.callback = callback;
-    this.updateMessages();
+  public setNewMessageCallback(callback: (messages: MessageProps[]) => void) {
+    this.newMessageCallback = callback;
   }
 
   public setNewSessionCallback(callback: (sessionId: string) => void) {
@@ -154,8 +153,8 @@ class ChatManager {
   }
 
   private updateMessages() {
-    if (this.callback) {
-      this.callback(this.messages);
+    if (this.newMessageCallback) {
+      this.newMessageCallback(this.messages);
     }
   }
 
