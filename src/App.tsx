@@ -86,7 +86,7 @@ function App() {
 	if (event.ctrlKey && event.key === 'b') {
 	  event.preventDefault();
 	  handleOpenCloseNavMenu();
-	} else if (event.ctrlKey && event.shiftKey && event.key === 'n') {
+	} else if (event.ctrlKey && event.shiftKey && event.key === 'o') {
 	  event.preventDefault();
 	  handleCreateNewChat();
 	}
